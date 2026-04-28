@@ -1,18 +1,14 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
-import fs from "fs";
 import multer from "multer";
 import dotenv from "dotenv";
-import { Resend } from "resend";
-import { hasSubscribers } from "diagnostics_channel";
-
-if (!fs.existsSync("uploads")) {
-  fs.mkdirSync("uploads");
-}
 dotenv.config();
 const app = express();
-const upload = multer({ storage: multer.memoryStorage() });app.use(cors());
+const upload = multer({ storage: multer.memoryStorage() });
+app.use(cors({
+  origin: "https://makeolix.vercel.app"
+}));
 app.use(express.json());
 
 app.post("/send-mail", upload.single("resume"), async (req, res) => {
@@ -24,7 +20,7 @@ app.post("/send-mail", upload.single("resume"), async (req, res) => {
       service: "gmail",
       auth: {
   user: process.env.EMAIL,
-  pass: process.env.EMAIL_PASS,
+  pass: process.env.PASS,
 },
     });
 
@@ -59,7 +55,7 @@ Message: ${data.message}
     }
 
     await transporter.sendMail({
-      from: `"Website Form" <${process.env.EMAIL}>`,
+      from: `"Website Form" <pawan@makeolix.com>`,
       to: "pawan@makeolix.com",
       subject: "New Form Submission 🚀",
       text: emailContent,
@@ -80,8 +76,6 @@ Message: ${data.message}
     res.status(500).json({ success: false });
   }
 });
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
+app.listen(5000, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});
