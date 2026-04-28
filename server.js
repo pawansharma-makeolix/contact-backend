@@ -4,14 +4,15 @@ import cors from "cors";
 import fs from "fs";
 import multer from "multer";
 import dotenv from "dotenv";
+import { Resend } from "resend";
+import { hasSubscribers } from "diagnostics_channel";
 
 if (!fs.existsSync("uploads")) {
   fs.mkdirSync("uploads");
 }
 dotenv.config();
 const app = express();
-const upload = multer({ dest: "uploads/" });
-app.use(cors());
+const upload = multer({ storage: multer.memoryStorage() });app.use(cors());
 app.use(express.json());
 
 app.post("/send-mail", upload.single("resume"), async (req, res) => {
@@ -83,4 +84,4 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-});
+}); 
