@@ -1,8 +1,13 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import cors from "cors";
+import fs from "fs";
 import multer from "multer";
 import dotenv from "dotenv";
+
+if (!fs.existsSync("uploads")) {
+  fs.mkdirSync("uploads");
+}
 dotenv.config();
 const app = express();
 const upload = multer({ dest: "uploads/" });
@@ -18,7 +23,7 @@ app.post("/send-mail", upload.single("resume"), async (req, res) => {
       service: "gmail",
       auth: {
   user: process.env.EMAIL,
-  pass: process.env.PASS,
+  pass: process.env.EMAIL_PASS,
 },
     });
 
@@ -53,7 +58,7 @@ Message: ${data.message}
     }
 
     await transporter.sendMail({
-      from: `"Website Form" <pawan@makeolix.com>`,
+      from: `"Website Form" <${process.env.EMAIL}>`,
       to: "pawan@makeolix.com",
       subject: "New Form Submission 🚀",
       text: emailContent,
@@ -74,6 +79,8 @@ Message: ${data.message}
     res.status(500).json({ success: false });
   }
 });
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
