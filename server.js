@@ -13,7 +13,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 app.use(cors({
   origin:[ "https://makeolix.vercel.app",
    "http://localhost:5173",
-    "http://localhost:3000",]
+    "http://localhost:1000",]
 }));
 app.use(express.json());
 
