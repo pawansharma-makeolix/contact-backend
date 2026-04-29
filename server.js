@@ -88,6 +88,19 @@ Message:    ${data.message}
 });
 
 const PORT = process.env.PORT || 5000;
+const https = require("https");
+
+setInterval(() => {
+  https.get("https://contact-backend-khx3.onrender.com/", (res) => {
+    console.log("Server jaag raha hai ✅", res.statusCode);
+  }).on("error", (err) => {
+    console.log("Ping error:", err.message);
+  });
+}, 5 * 60 * 1000); 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
+
